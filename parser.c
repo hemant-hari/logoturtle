@@ -121,6 +121,7 @@ void Push(Pstack *s, int n)
    Elem *e;
    if (s->numelems == 0){
       s->tp->i = n;
+      s->numelems++;
       return;
    }
 
