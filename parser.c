@@ -119,7 +119,7 @@ void InitStack(Pstack *s)
 void Push(Pstack *s, int n)
 {
    Elem *e;
-   if (s->numelems == 0){
+   if (s->numelems == 0 && s->tp != NULL){
       s->tp->i = n;
       s->numelems++;
       return;
