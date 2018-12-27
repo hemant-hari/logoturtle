@@ -103,6 +103,48 @@ void Num(Program *p)
 
 void Polish(Program *p)
 {
-
    VarNum(p);
+   p->cl += 1;
+
+
+}
+
+void InitStack(Pstack *s)
+{
+   s->tp = (Elem *)calloc(1, sizeof(Elem));
+   s->tp->prev = NULL;
+   s->numelems = 0;
+}
+
+void Push(Pstack *s, int n)
+{
+   Elem *e;
+   if (s->numelems == 0){
+      s->tp->i = n;
+      return;
+   }
+
+   e = (Elem *)malloc(sizeof(Elem));
+   e->i = n;
+   e->prev = s->tp;
+
+   s->tp = e;
+   s->numelems++;
+}
+
+int Pop(Stack *s)
+{
+   Elem *tmp;
+   int retv = s->tp->i;
+
+   if (numelems == 0){
+      ERROR("? Attempted to pop from empty stack ?")
+   }
+
+   tmp = s->tp;
+   s->tp = s->tp->prev;
+   free(tmp);
+
+   s->numelems--;
+   return retv;
 }
