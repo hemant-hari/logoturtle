@@ -40,7 +40,6 @@ int Var(Program *p);
 void Num(Program *p);
 void Polish(Program *p);
 
-
 void InitStack(Pstack *s);
 void Push(Pstack *s, int n);
 int Pop(Stack *s);

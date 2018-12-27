@@ -103,28 +103,20 @@ void Num(Program *p)
 
 void Polish(Program *p)
 {
+   Pstack stk;
+
    VarNum(p);
+
    p->cl += 1;
 
-
-}
-
-void InitStack(Pstack *s)
-{
-   s->tp = (Elem *)calloc(1, sizeof(Elem));
-   s->tp->prev = NULL;
-   s->numelems = 0;
+   while (isVarNum(p)){
+      
+   }
 }
 
 void Push(Pstack *s, int n)
 {
    Elem *e;
-   if (s->numelems == 0 && s->tp != NULL){
-      s->tp->i = n;
-      s->numelems++;
-      return;
-   }
-
    e = (Elem *)malloc(sizeof(Elem));
    e->i = n;
    e->prev = s->tp;
