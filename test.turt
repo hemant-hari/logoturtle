@@ -2,5 +2,6 @@
    LT 10
    FD 100
    RT 210
-   SET A := 100 100 50 60 - *
+   SET A := 100 70 60 - *
+   DO A FROM C TO 20
 }

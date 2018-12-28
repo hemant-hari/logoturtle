@@ -9,7 +9,8 @@
 #define NUMVARS 26
 #define CTOINT 'A'
 #define strsame(A,B) (strcmp(A,B) == 0)
-#define ERROR(PHRASE) {fprintf(stderr, "Fatal Error %s occured in %s, line %d\n", PHRASE, __FILE__, __LINE__); exit(2);}
+#define ERROR(PHRASE) {fprintf(stderr, "Fatal Error %s occured in %s, \
+line %d\n", PHRASE, __FILE__, __LINE__); exit(2);}
 
 enum bool{false, true};
 typedef enum bool bool;
@@ -42,6 +43,7 @@ void Set(Program *p);
 int Var(Program *p);
 void Num(Program *p);
 void Polish(Program *p);
+void Do(Program *p);
 
 bool isOperator(Program *p);
 bool isVarNum(Program *p);

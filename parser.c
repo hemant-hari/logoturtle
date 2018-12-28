@@ -24,19 +24,24 @@ void Instruction(Program *p)
       VarNum(p);
       return;
    }
-   if (strsame(p->wds[p->cl], "LT")){
+   else if (strsame(p->wds[p->cl], "LT")){
       p->cl += 1;
       VarNum(p);
       return;
    }
-   if (strsame(p->wds[p->cl], "RT")){
+   else if (strsame(p->wds[p->cl], "RT")){
       p->cl += 1;
       VarNum(p);
       return;
    }
-   if (strsame(p->wds[p->cl], "SET")){
+   else if (strsame(p->wds[p->cl], "SET")){
       p->cl += 1;
       Set(p);
+      return;
+   }
+   else if (strsame(p->wds[p->cl], "DO")){
+      p->cl += 1;
+      Do(p);
       return;
    }
 
@@ -79,6 +84,7 @@ int Var(Program *p)
       if (!isupper(p->wds[p->cl][0])){
          ERROR("? Variable not a single capital letter ?")
       }
+      ERROR("? Variable name too long ?")
    }
    charval = p->wds[p->cl][0] - CTOINT;
 
@@ -131,6 +137,30 @@ void Polish(Program *p)
    p->currvar = Pop(&stk);
 
    printf("Polish Output = %d\n", p->currvar);
+}
+
+void Do(Program *p)
+{
+   int charv;
+
+   charv = Var(p);
+   p->cl += 1;
+
+   if (!strsame(p->wds[p->cl], "FROM")){
+      ERROR("? Invalid instruction after variable, use 'FROM' ?")
+   }
+   p->cl += 1;
+
+   VarNum(p);
+   p->cl += 1;
+   p->vars[charv] = p->currvar;
+
+   if (!strsame(p->wds[p->cl], "TO")){
+      ERROR("? Invalid instruction after variable or number, use 'TO' ?")
+   }
+   p->cl += 1;
+
+   VarNum(p);
 }
 
 bool isOperator(Program *p)
