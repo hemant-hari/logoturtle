@@ -67,8 +67,7 @@ void Set(Program *p)
 
    p->cl += 1;
 
-   /*Polish(p);*/
-   VarNum(p);
+   Polish(p);
 
    p->vars[charv] = p->currvar;
 }
@@ -104,14 +103,68 @@ void Num(Program *p)
 void Polish(Program *p)
 {
    Pstack stk;
+   int tmp1, tmp2;
+   stk.numelems = 0;
 
    VarNum(p);
-
    p->cl += 1;
+   Push(&stk, p->currvar);
 
-   while (isVarNum(p)){
-      
+   while (isOperator(p) || isVarNum(p)){
+      if (isVarNum(p)){
+         VarNum(p);
+         Push(&stk, p->currvar);
+      }
+      else{
+         tmp1 = Pop(&stk);
+         tmp2 = Pop(&stk);
+         Push(&stk, Calculate(p, tmp2, tmp1));
+      }
+      p->cl += 1;
    }
+   p->cl -= 1;
+
+   if (stk.numelems != 1){
+      ERROR("? Incomplete Polish Detected, check number of operators ?")
+   }
+
+   p->currvar = Pop(&stk);
+
+   printf("Polish Output = %d\n", p->currvar);
+}
+
+bool isOperator(Program *p)
+{
+   char c = p->wds[p->cl][0];
+   if (strlen(p->wds[p->cl]) == 1){
+      switch(c){
+         case '*':
+         case '/':
+         case '+':
+         case '-':
+            return true;
+         default:
+            return false;
+      }
+   }
+   return false;
+}
+
+bool isVarNum(Program *p)
+{
+   int i;
+
+   if(strlen(p->wds[p->cl]) == 1 && isupper(p->wds[p->cl][0])){
+      return true;
+   }
+
+   for (i=0; p->wds[p->cl][i] != '\0'; i++){
+      if (!isdigit(p->wds[p->cl][i])){
+         return false;
+      }
+   }
+
+   return true;
 }
 
 void Push(Pstack *s, int n)
@@ -125,19 +178,37 @@ void Push(Pstack *s, int n)
    s->numelems++;
 }
 
-int Pop(Stack *s)
+int Pop(Pstack *s)
 {
    Elem *tmp;
-   int retv = s->tp->i;
+   int retv;
 
-   if (numelems == 0){
+   if (s->numelems == 0){
       ERROR("? Attempted to pop from empty stack ?")
    }
 
+   retv = s->tp->i;
    tmp = s->tp;
    s->tp = s->tp->prev;
    free(tmp);
 
    s->numelems--;
    return retv;
+}
+
+int Calculate(Program *p, int a, int b)
+{
+   char c = p->wds[p->cl][0];
+   switch(c){
+      case '*':
+         return (a*b);
+      case '/':
+         return (a/b);
+      case '+':
+         return (a+b);
+      case '-':
+         return (a-b);
+      default:
+         return 0;
+   }
 }

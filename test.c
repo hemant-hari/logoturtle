@@ -1,8 +1,12 @@
+void testfunc(void);
+
 int main(int argc, char **argv)
 {
    int i;
    FILE *fp;
    Program prog;
+
+   testfunc();
 
    if (argc != 2){
       fprintf(stderr, "ERROR: Incorrect number of arguments to program\n");
@@ -27,4 +31,22 @@ int main(int argc, char **argv)
    printf("Parsed OK\n");
 
    return 0;
+}
+
+void testfunc(void)
+{
+   int a, b, c, d;
+   Pstack stk;
+
+   Push(&stk, 10);
+   Push(&stk, 5);
+   Push(&stk, 30);
+   Push(&stk, 20);
+
+   a = Pop(&stk);
+   b = Pop(&stk);
+   c = Pop(&stk);
+   d = Pop(&stk);
+
+   printf("%d %d %d %d\n", a, b, c, d);
 }
