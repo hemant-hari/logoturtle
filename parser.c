@@ -141,34 +141,60 @@ void Polish(Program *p)
 
 void Do(Program *p)
 {
-   int charv;
+   Pstack stk;
+   int charv, limitval, modval;
 
+   /* Initialise stack */
+   stk.numelems = 0;
+   stk.tp = NULL;
+
+   /* Get array key for input variable */
    charv = Var(p);
    p->cl += 1;
 
+   /* Check Syntax */
    if (!strsame(p->wds[p->cl], "FROM")){
       ERROR("? Invalid instruction after variable, use 'FROM' ?")
    }
    p->cl += 1;
 
+   /* Get Initial Value for Variable */
    VarNum(p);
    p->cl += 1;
    p->vars[charv] = p->currvar;
 
+   /* Check Syntax */
    if (!strsame(p->wds[p->cl], "TO")){
       ERROR("? Invalid instruction after variable or number, use 'TO' ?")
    }
    p->cl += 1;
 
+   /* Get limiting value for variable */
    VarNum(p);
+   limitval = p->currvar;
    p->cl += 1;
 
+   /* Check Syntax */
    if (!strsame(p->wds[p->cl], "{")){
       ERROR("? Invalid symbol after loop start, use '{' ?")
    }
    p->cl += 1;
+   Push(&stk, p->cl);
 
+   /* Checks whether starting value is greater or less than
+   initial and decrements or increments accordingly */
+   modval = (limitval < p->vars[charv]) ? -1 : 1 ;
+
+   while (p->vars[charv] != limitval){
+      p->cl = Pop(&stk);
+      Push(&stk, p->cl);
+      InstructionList(p);
+      p->vars[charv] += modval;
+   }
+   p->cl = Pop(&stk);
+   Push(&stk, p->cl);
    InstructionList(p);
+   p->vars[charv] += modval;
 }
 
 bool isOperator(Program *p)

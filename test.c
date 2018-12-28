@@ -28,7 +28,6 @@ int main(int argc, char **argv)
    }
 
    Prog(&prog);
-   printf("Parsed OK\n");
 
    return 0;
 }

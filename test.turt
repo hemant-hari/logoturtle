@@ -3,5 +3,11 @@
    FD 100
    RT 210
    SET A := 100 70 60 - *
-   DO A FROM C TO 20
+   DO A FROM 1 TO 2 {
+      SET C := A 2 *
+      FD A
+      DO B FROM 10 TO 20 {
+         SET C := B 20 -
+      }
+   }
 }
