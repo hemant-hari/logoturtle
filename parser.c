@@ -161,6 +161,14 @@ void Do(Program *p)
    p->cl += 1;
 
    VarNum(p);
+   p->cl += 1;
+
+   if (!strsame(p->wds[p->cl], "{")){
+      ERROR("? Invalid symbol after loop start, use '{' ?")
+   }
+   p->cl += 1;
+
+   InstructionList(p);
 }
 
 bool isOperator(Program *p)
