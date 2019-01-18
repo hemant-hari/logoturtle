@@ -18,10 +18,6 @@ int main(int argc, char **argv)
       prog.wds[i][0] = '\0';
    }
 
-   prog.t.x = 400;
-   prog.t.y = 300;
-   prog.t.dir = 90;
-
    if(!(fp = fopen(argv[1], "r"))){
       fprintf(stderr, "Cannot open %s\n", argv[1]);
       exit(2);

@@ -1,7 +1,7 @@
 {
    LT 10
    FD 100
-   RT 210
+   RT 100
    SET A := 100 70 60 - *
    DO A FROM 1 TO 2 {
       SET C := A 2 *

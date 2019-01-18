@@ -15,11 +15,19 @@ line %d\n", PHRASE, __FILE__, __LINE__); exit(2);}
 enum bool{false, true};
 typedef enum bool bool;
 
+struct turtle{
+   double x;
+   double y;
+   double dir;
+};
+typedef struct turtle turtle;
+
 struct prog{
    char wds[MAXNUMTOKENS][MAXTOKENSIZE];
    int vars[NUMVARS];
    int currvar;
    int cl; /* Current Line */
+   turtle t;
 };
 typedef struct prog Program;
 

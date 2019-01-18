@@ -27,11 +27,13 @@ void Instruction(Program *p)
    else if (strsame(p->wds[p->cl], "LT")){
       p->cl += 1;
       VarNum(p);
+      p->t.dir += p->currvar;
       return;
    }
    else if (strsame(p->wds[p->cl], "RT")){
       p->cl += 1;
       VarNum(p);
+      p->t.dir -= p->currvar;
       return;
    }
    else if (strsame(p->wds[p->cl], "SET")){
@@ -120,7 +122,6 @@ void Polish(Program *p)
       if (isVarNum(p)){
          VarNum(p);
          Push(&stk, p->currvar);
-         
       }
       else{
          tmp1 = Pop(&stk);
