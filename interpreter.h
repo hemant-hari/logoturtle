@@ -12,8 +12,8 @@
 #define NUMVARS 26
 #define CTOINT 'A'
 #define strsame(A,B) (strcmp(A,B) == 0)
-#define ERROR(PHRASE) {fprintf(stderr, "Fatal Error %s occured in %s, \
-line %d\n", PHRASE, __FILE__, __LINE__); exit(2);}
+#define ERROR(PHRASE, l) {fprintf(stderr, "Fatal Error %s occured while interpreting, \
+phrase %d\n", PHRASE, l); exit(2);}
 
 enum bool{false, true};
 typedef enum bool bool;
@@ -27,8 +27,8 @@ typedef struct turtle turtle;
 
 struct prog{
    char wds[MAXNUMTOKENS][MAXTOKENSIZE];
-   int vars[NUMVARS];
-   int currvar;
+   double vars[NUMVARS];
+   double currvar;
    int cl; /* Current Line */
    turtle t;
    struct SDL_Simplewin *swin;
@@ -36,7 +36,7 @@ struct prog{
 typedef struct prog Program;
 
 struct stackelem{
-   int i;
+   double i;
    struct stackelem *prev;
 };
 typedef struct stackelem Elem;

@@ -34,18 +34,5 @@ int main(int argc, char **argv)
 
 void testfunc(void)
 {
-   int a, b, c, d;
-   Pstack stk;
-
-   Push(&stk, 10);
-   Push(&stk, 5);
-   Push(&stk, 30);
-   Push(&stk, 20);
-
-   a = Pop(&stk);
-   b = Pop(&stk);
-   c = Pop(&stk);
-   d = Pop(&stk);
-
-   printf("%d %d %d %d\n", a, b, c, d);
+   
 }

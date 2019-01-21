@@ -1,4 +1,4 @@
-LIBS = -lm -lSDL2main -lSDL2
+LIBS = -lm -lSDL2
 CFLAGS = -Wall -Wextra -Werror -Wfloat-equal -pedantic -ansi $(LIBS)
 DEBUG = -g3
 OPTIM = -O2

@@ -3,7 +3,7 @@
 void Prog(Program *p)
 {
    if (!strsame(p->wds[p->cl], "{")){
-      ERROR("? No opening curly brace '{' ?")
+      ERROR("? No opening curly brace '{' ?",p->cl)
    }
    p->cl = p->cl + 1;
    InstructionList(p);
@@ -50,7 +50,7 @@ void Instruction(Program *p)
       return;
    }
 
-   ERROR("? Invalid instruction given ?")
+   ERROR("? Invalid instruction given ?",p->cl)
 }
 
 void VarNum(Program *p)
@@ -72,7 +72,7 @@ void Set(Program *p)
    p->cl += 1;
 
    if (!strsame(p->wds[p->cl], ":=")){
-      ERROR("? Invalid symbol after variable, use ':=' ?")
+      ERROR("? Invalid symbol after variable, use ':=' ?",p->cl)
    }
 
    p->cl += 1;
@@ -87,9 +87,9 @@ int Var(Program *p)
    int charval;
    if (strlen(p->wds[p->cl]) != 1){
       if (!isupper(p->wds[p->cl][0])){
-         ERROR("? Variable not a single capital letter ?")
+         ERROR("? Variable not a single capital letter ?",p->cl)
       }
-      ERROR("? Variable name too long ?")
+      ERROR("? Variable name too long ?",p->cl)
    }
    charval = p->wds[p->cl][0] - CTOINT;
 
@@ -101,12 +101,12 @@ void Num(Program *p)
    int i;
 
    for (i = 0; p->wds[p->cl][i] != '\0'; i++){
-      if (!isdigit(p->wds[p->cl][i])){
-         ERROR("? Value after instruction not an integer ?")
+      if (!isdigit(p->wds[p->cl][i]) && (p->wds[p->cl][i] != 46)) {
+         ERROR("? Value after instruction not an integer ?",p->cl)
       }
    }
-   p->currvar = atoi(p->wds[p->cl]);
-   if (p->currvar == 0){
+   p->currvar = atof(p->wds[p->cl]);
+   if (p->currvar - 0 < 0.000001){
       printf("? Value for instruction is 0, is this intentional ?\n");
    }
 }
@@ -135,7 +135,7 @@ void Polish(Program *p)
    }
 
    if (stk.numelems != 1){
-      ERROR("? Incomplete Polish Detected, check number of operators ?")
+      ERROR("? Incomplete Polish Detected, check number of operators ?",p->cl)
    }
 
    p->currvar = Pop(&stk);
@@ -144,7 +144,8 @@ void Polish(Program *p)
 void Do(Program *p)
 {
    Pstack stk;
-   int charv, limitval, modval;
+   int charv;
+   double limitval, modval;
 
    /* Initialise stack */
    stk.numelems = 0;
@@ -156,7 +157,7 @@ void Do(Program *p)
 
    /* Check Syntax */
    if (!strsame(p->wds[p->cl], "FROM")){
-      ERROR("? Invalid instruction after variable, use 'FROM' ?")
+      ERROR("? Invalid instruction after variable, use 'FROM' ?",p->cl)
    }
    p->cl += 1;
 
@@ -167,7 +168,7 @@ void Do(Program *p)
 
    /* Check Syntax */
    if (!strsame(p->wds[p->cl], "TO")){
-      ERROR("? Invalid instruction after variable or number, use 'TO' ?")
+      ERROR("? Invalid instruction after variable or number, use 'TO' ?",p->cl)
    }
    p->cl += 1;
 
@@ -178,7 +179,7 @@ void Do(Program *p)
 
    /* Check Syntax */
    if (!strsame(p->wds[p->cl], "{")){
-      ERROR("? Invalid symbol after loop start, use '{' ?")
+      ERROR("? Invalid symbol after loop start, use '{' ?",p->cl)
    }
    p->cl += 1;
    Push(&stk, p->cl);
@@ -187,7 +188,7 @@ void Do(Program *p)
    initial and decrements or increments accordingly */
    modval = (limitval < p->vars[charv]) ? -1 : 1 ;
 
-   while (p->vars[charv] != limitval){
+   while (p->vars[charv] - limitval < 0.0001){
       p->cl = Pop(&stk);
       Push(&stk, p->cl);
       InstructionList(p);
@@ -250,7 +251,7 @@ int Pop(Pstack *s)
    int retv;
 
    if (s->numelems == 0){
-      ERROR("? Attempted to pop from empty stack ?")
+      ERROR("? Attempted to pop from empty stack ?", __LINE__)
    }
 
    retv = s->tp->i;
@@ -296,4 +297,10 @@ void Move(Program *p)
    p->t.y = y2;
 
    Neill_SDL_UpdateScreen(p->swin);
+
+   Neill_SDL_Events(p->swin);
+
+   if(p->swin->finished){
+      ERROR("? PROGRAM ABORTED ?", __LINE__)
+   }
 }

@@ -9,16 +9,16 @@
 #define NUMVARS 26
 #define CTOINT 'A'
 #define strsame(A,B) (strcmp(A,B) == 0)
-#define ERROR(PHRASE) {fprintf(stderr, "Fatal Error %s occured in %s, \
-line %d\n", PHRASE, __FILE__, __LINE__); exit(2);}
+#define ERROR(PHRASE,l) {fprintf(stderr, "Fatal Error %s occured while parsing, \
+phrase %d\n", PHRASE, l); exit(2);}
 
 enum bool{false, true};
 typedef enum bool bool;
 
 struct prog{
    char wds[MAXNUMTOKENS][MAXTOKENSIZE];
-   int vars[NUMVARS];
-   int currvar;
+   double vars[NUMVARS];
+   double currvar;
    int cl; /* Current Line */
 };
 typedef struct prog Program;
