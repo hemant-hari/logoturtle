@@ -1,3 +1,5 @@
+#include "neillsdl2.h"
+
 void testfunc(void);
 
 int main(int argc, char **argv)
@@ -5,6 +7,7 @@ int main(int argc, char **argv)
    int i;
    FILE *fp;
    Program prog;
+   SDL_Simplewin sw;
 
    testfunc();
 
@@ -31,7 +34,17 @@ int main(int argc, char **argv)
       assert(i<MAXNUMTOKENS);
    }
 
+   Neill_SDL_Init(&sw);
+   prog.swin = &sw;
+
    Prog(&prog);
+
+   while(!sw.finished){
+      Neill_SDL_Events(&sw);
+   }
+
+   SDL_Quit();
+   atexit(SDL_Quit);
 
    return 0;
 }

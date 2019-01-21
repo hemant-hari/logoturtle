@@ -1,13 +1,11 @@
 {
-   LT 10
-   FD 100
-   RT 100
-   SET A := 100 70 60 - *
-   DO A FROM 1 TO 2 {
-      SET C := A 2 *
+   DO A FROM 1 TO 70 {
       FD A
-      DO B FROM 10 TO 20 {
-         SET C := B 20 -
+      RT 30
+      DO B FROM 1 TO 8 {
+         SET C := A 5 / ;
+         FD C
+         RT 45
       }
    }
 }

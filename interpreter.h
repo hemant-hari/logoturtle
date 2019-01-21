@@ -2,8 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 #include <ctype.h>
 
+#define PI 3.14159265358979323846
+#define MILLISECONDDELAY 20
 #define MAXNUMTOKENS 300
 #define MAXTOKENSIZE 15
 #define NUMVARS 26
@@ -28,6 +31,7 @@ struct prog{
    int currvar;
    int cl; /* Current Line */
    turtle t;
+   struct SDL_Simplewin *swin;
 };
 typedef struct prog Program;
 
@@ -58,3 +62,4 @@ bool isVarNum(Program *p);
 void Push(Pstack *s, int n);
 int Pop(Pstack *s);
 int Calculate(Program *p, int a, int b);
+void Move(Program *p);

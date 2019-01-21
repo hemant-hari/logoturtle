@@ -22,6 +22,6 @@ run: all
 	./interptst test.turt
 
 clean:
-	rm -f splbst splhsh
+	rm -f interptst prstst
 
 .PHONY: clean run all

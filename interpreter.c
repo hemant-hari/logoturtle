@@ -1,3 +1,5 @@
+#include "neillsdl2.h"
+
 void Prog(Program *p)
 {
    if (!strsame(p->wds[p->cl], "{")){
@@ -22,6 +24,7 @@ void Instruction(Program *p)
    if (strsame(p->wds[p->cl], "FD")){
       p->cl += 1;
       VarNum(p);
+      Move(p);
       return;
    }
    else if (strsame(p->wds[p->cl], "LT")){
@@ -118,7 +121,7 @@ void Polish(Program *p)
    p->cl += 1;
    Push(&stk, p->currvar);
 
-   while (isOperator(p) || isVarNum(p)){
+   while (!strsame(p->wds[p->cl],";")){
       if (isVarNum(p)){
          VarNum(p);
          Push(&stk, p->currvar);
@@ -130,7 +133,6 @@ void Polish(Program *p)
       }
       p->cl += 1;
    }
-   p->cl -= 1;
 
    if (stk.numelems != 1){
       ERROR("? Incomplete Polish Detected, check number of operators ?")
@@ -275,4 +277,23 @@ int Calculate(Program *p, int a, int b)
       default:
          return 0;
    }
+}
+
+void Move(Program *p)
+{
+   double x2, y2, angle = 2 * PI * p->t.dir / 360;
+
+   x2 = p->t.x + cos(angle)*p->currvar*2;
+   y2 = p->t.y + sin(angle)*p->currvar*2;
+
+   Neill_SDL_SetDrawColour(p->swin, rand()%SDL_8BITCOLOUR,
+                                rand()%SDL_8BITCOLOUR,
+                                rand()%SDL_8BITCOLOUR);
+
+   SDL_RenderDrawLine(p->swin->renderer, (int) p->t.x, (int)p->t.y, (int)x2, (int)y2);
+
+   p->t.x = x2;
+   p->t.y = y2;
+
+   Neill_SDL_UpdateScreen(p->swin);
 }

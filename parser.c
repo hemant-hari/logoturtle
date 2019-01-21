@@ -116,7 +116,7 @@ void Polish(Program *p)
    p->cl += 1;
    Push(&stk, p->currvar);
 
-   while (isOperator(p) || isVarNum(p)){
+   while (!strsame(p->wds[p->cl],";")){
       if (isVarNum(p)){
          VarNum(p);
          Push(&stk, p->currvar);
@@ -128,15 +128,12 @@ void Polish(Program *p)
       }
       p->cl += 1;
    }
-   p->cl -= 1;
 
    if (stk.numelems != 1){
       ERROR("? Incomplete Polish Detected, check number of operators ?")
    }
 
    p->currvar = Pop(&stk);
-
-   printf("Polish Output = %d\n", p->currvar);
 }
 
 void Do(Program *p)
