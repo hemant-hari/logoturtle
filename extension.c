@@ -172,7 +172,7 @@ int Par(Program *p)
 
    if (p->wds[p->cl][0] == 'P'){
       if (isdigit(p->wds[p->cl][1])){
-         return p->wds[p->cl][1];
+         return p->wds[p->cl][1] - '0';
       }
       ERROR("? Parameter not followed by digit ?",p->cl)
    }
@@ -198,7 +198,7 @@ void Num(Program *p)
    int i;
 
    for (i = 0; p->wds[p->cl][i] != '\0'; i++){
-      if (!isdigit(p->wds[p->cl][i]) && (p->wds[p->cl][i] != 46)) {
+      if (!isdigit(p->wds[p->cl][i]) && (p->wds[p->cl][i] != 46) && (p->wds[p->cl][i] != '-')) {
          printf("%s\n", p->wds[p->cl]);
          ERROR("? Value after instruction not an integer ?",p->cl)
       }
@@ -218,10 +218,12 @@ void Polish(Program *p)
    ParVarNum(p);
    p->cl += 1;
    Push(&stk, p->currvar);
+   printf("pushing %f\n", p->currvar);
 
    while (!strsame(p->wds[p->cl],";")){
       if (isVarNum(p)){
          ParVarNum(p);
+         printf("pushing %f\n", p->currvar);
          Push(&stk, p->currvar);
       }
       else{
@@ -279,16 +281,22 @@ void Do(Program *p)
 
    /* Checks whether starting value is greater or less than
    initial and decrements or increments accordingly */
-   modval = (limitval < p->vars[charv]) ? -1 : 1 ;
-
-   while (p->vars[charv] - limitval < 0.0001){
-      p->cl = retl;
-      InstructionList(p);
-      p->vars[charv] += modval;
+   if (p->isfunction == false){
+      modval = (limitval < p->vars[charv]) ? -1 : 1 ;
+      while (p->vars[charv] - limitval < 0.0001){
+         p->cl = retl;
+         InstructionList(p);
+         p->vars[charv] += modval;
+      }
    }
-   p->cl = retl;
-   InstructionList(p);
-   p->vars[charv] += modval;
+   else{
+      modval = (limitval < p->currfunc->locvars[charv]) ? -1 : 1 ;
+      while (p->currfunc->locvars[charv] - limitval < 0.0001){
+         p->cl = retl;
+         InstructionList(p);
+         p->currfunc->locvars[charv] += modval;
+      }
+   }
 }
 
 void CallFunction(Program *p)
@@ -301,12 +309,13 @@ void CallFunction(Program *p)
    p->cl += 1;
 
    while(!strsame(p->wds[p->cl],";")){
-      Num(p);
+      VarNum(p);
       p->currfunc->params[i] = p->currvar;
       p->cl += 1;
+      i++;
    }
 
-   if (i != p->currfunc->numparams - 1){
+   if (i != p->currfunc->numparams){
       ERROR("? Incorrect number of parameters used in function call ?", p->cl)
    }
    retl = p->cl;

@@ -188,9 +188,6 @@ void Do(Program *p)
       InstructionList(p);
       p->vars[charv] += modval;
    }
-   p->cl = retl;
-   InstructionList(p);
-   p->vars[charv] += modval;
 }
 
 bool isOperator(Program *p)
