@@ -24,8 +24,10 @@ int main(int argc, char **argv)
    prog.t.x = WWIDTH / 2;
    prog.t.y = WHEIGHT / 2;
    prog.t.dir = 90.0;
+   prog.currvar = 0;
 
    if(!(fp = fopen(argv[1], "r"))){
+      fclose(fp);
       fprintf(stderr, "Cannot open %s\n", argv[1]);
       exit(2);
    }
@@ -46,6 +48,8 @@ int main(int argc, char **argv)
    SDL_Quit();
    atexit(SDL_Quit);
 
+   fclose(fp);
+
    return 0;
 }
 
@@ -53,6 +57,7 @@ void testfunc(void)
 {
    int a, b, c, d;
    Pstack stk;
+   stk.numelems = 0;
 
    Push(&stk, 10);
    Push(&stk, 5);

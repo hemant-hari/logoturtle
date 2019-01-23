@@ -2,6 +2,7 @@
 
 void Prog(Program *p)
 {
+   p->isfunction = false;
    if (strsame(p->wds[p->cl], "{")){
       p->cl += 1;
       p->numbraces = 1;
@@ -54,6 +55,8 @@ void MakeFunction(Program *p)
    p->cl += 1;
    dic_insert(p->funcs, funcname, numparams, p->cl);
 
+   p->currfunc = func_get(p->funcs, funcname);
+
    ParseInstructionList(p);
 }
 
@@ -65,6 +68,7 @@ void MainProg(Program *p)
    p->numbraces = 0;
    p->cl += 1;
    InstructionList(p);
+   dic_free(&(p->funcs));
 }
 
 void InstructionList(Program *p)

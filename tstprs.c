@@ -19,6 +19,7 @@ int main(int argc, char **argv)
    }
 
    if(!(fp = fopen(argv[1], "r"))){
+      fclose(fp);
       fprintf(stderr, "Cannot open %s\n", argv[1]);
       exit(2);
    }
@@ -29,10 +30,12 @@ int main(int argc, char **argv)
 
    Prog(&prog);
 
+   fclose(fp);
+
    return 0;
 }
 
 void testfunc(void)
 {
-   
+
 }

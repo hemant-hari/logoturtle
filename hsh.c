@@ -19,12 +19,19 @@ dic* dic_init(int size)
 void dic_insert(dic* s, char* v, int nump, int stl)
 {
    Entry* input;
-   int location, new_sz;
+   int location, new_sz, i;
    double loadfactor = (((double) s->occ) / ((double) s->sz));
 
    input = init_entry(v, s->wordsz);
    input->numparams = nump;
    input->stl = stl;
+
+   for (i=0; i<MAXNUMPARAMS; i++){
+      input->params[i] = 0;
+   }
+   for (i=0; i<NUMVARS; i++){
+      input->locvars[i] = 0;
+   }
 
    /* If the load factor of the table is too high, rehash the table */
    if (loadfactor>MAXLOAD){
@@ -75,7 +82,7 @@ void dic_free(dic** s)
    }
 
    free(dc->entries);
-   free(dc);
+   free(*s);
    dc = NULL;
 }
 
