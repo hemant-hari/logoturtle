@@ -1,14 +1,24 @@
 [
    CIRCLE 1 {
-      DO A FROM 1 TO 60 {
+      DO A FROM 1 TO 20 {
          FD P0
-         RT 6
+         RT 18
+      }
+   }
+   POLY 2 {
+      SET A := P0 ;
+      SET B := 360 A / ;
+      DO C FROM 1 TO A {
+         FD P1
+         RT B
       }
    }
 ]
 {
-   DO A FROM 1 TO 70 {
-      SET B := A 2 / 1 + ;
-      CIRCLE B ;
+   DO A FROM 1 TO 301 {
+      SET B := A 50 + ;
+      FD B
+      LT 90.911
+      CIRCLE A ;
    }
 }

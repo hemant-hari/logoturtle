@@ -101,6 +101,7 @@ int Calculate(Program *p, int a, int b);
 void Move(Program *p);
 void VarSet(Program *p, int index);
 void VarGet(Program *p, int index);
+int round(double num);
 
 void ParseInstructionList(Program *p);
 void ParseInstruction(Program *p);

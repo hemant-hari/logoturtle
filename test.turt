@@ -1,9 +1,9 @@
 {
-   DO A FROM 1 TO 300 {
+   DO A FROM 1 TO 301 {
       SET B := A 50 + ;
       FD B
       LT 90.911
-      DO C FROM 1 TO 20 {
+      DO C FROM 1 TO 21 {
          FD 10
          RT 62
       }

@@ -30,13 +30,13 @@ void Instruction(Program *p)
    else if (strsame(p->wds[p->cl], "LT")){
       p->cl += 1;
       VarNum(p);
-      p->t.dir -= p->currvar;
+      p->t.dir += p->currvar;
       return;
    }
    else if (strsame(p->wds[p->cl], "RT")){
       p->cl += 1;
       VarNum(p);
-      p->t.dir += p->currvar;
+      p->t.dir -= p->currvar;
       return;
    }
    else if (strsame(p->wds[p->cl], "SET")){
@@ -274,7 +274,7 @@ void Move(Program *p)
 {
    double x2, y2, angle = 2 * PI * p->t.dir / 360;
 
-   x2 = p->t.x - cos(angle)*p->currvar*2;
+   x2 = p->t.x + cos(angle)*p->currvar*2;
    y2 = p->t.y - sin(angle)*p->currvar*2;
 
    Neill_SDL_SetDrawColour(p->swin, rand()%SDL_8BITCOLOUR,

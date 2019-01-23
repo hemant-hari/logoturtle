@@ -38,12 +38,13 @@ void FunctionList(Program *p)
 void MakeFunction(Program *p)
 {
    char* funcname = p->wds[p->cl];
-   int numparams = 0;
+   int numparams = atoi(p->wds[++(p->cl)]);
 
-   p->cl += 1;
    Num(p);
 
-   numparams = p->currvar;
+   if (numparams > MAXNUMPARAMS){
+      ERROR("? Tried to set too many parameters ?", p->cl)
+   }
 
    p->cl += 1;
    if (!strsame(p->wds[p->cl], "{")){
@@ -87,13 +88,13 @@ void Instruction(Program *p)
    else if (strsame(p->wds[p->cl], "LT")){
       p->cl += 1;
       ParVarNum(p);
-      p->t.dir -= p->currvar;
+      p->t.dir += p->currvar;
       return;
    }
    else if (strsame(p->wds[p->cl], "RT")){
       p->cl += 1;
       ParVarNum(p);
-      p->t.dir += p->currvar;
+      p->t.dir -= p->currvar;
       return;
    }
    else if (strsame(p->wds[p->cl], "SET")){
@@ -137,7 +138,7 @@ void ParVarNum(Program *p)
       }
       ERROR("? Parameter called outside a function ?", p->cl)
    }
-   else if (!isdigit(p->wds[p->cl][0])){
+   else if (strlen(p->wds[p->cl]) == 1 && !isdigit(p->wds[p->cl][0])){
       VarGet(p, Var(p));
    }
    else{
@@ -199,7 +200,6 @@ void Num(Program *p)
 
    for (i = 0; p->wds[p->cl][i] != '\0'; i++){
       if (!isdigit(p->wds[p->cl][i]) && (p->wds[p->cl][i] != 46) && (p->wds[p->cl][i] != '-')) {
-         printf("%s\n", p->wds[p->cl]);
          ERROR("? Value after instruction not an integer ?",p->cl)
       }
    }
@@ -218,12 +218,10 @@ void Polish(Program *p)
    ParVarNum(p);
    p->cl += 1;
    Push(&stk, p->currvar);
-   printf("pushing %f\n", p->currvar);
 
    while (!strsame(p->wds[p->cl],";")){
-      if (isVarNum(p)){
+      if (isParVarNum(p)){
          ParVarNum(p);
-         printf("pushing %f\n", p->currvar);
          Push(&stk, p->currvar);
       }
       else{
@@ -379,7 +377,7 @@ bool isParVarNum(Program *p)
    }
 
    for (i=0; p->wds[p->cl][i] != '\0'; i++){
-      if (!isdigit(p->wds[p->cl][i])){
+      if (!isdigit(p->wds[p->cl][i]) && (p->wds[p->cl][i] != 46) && (p->wds[p->cl][i] != '-')){
          return false;
       }
    }
@@ -435,16 +433,17 @@ int Calculate(Program *p, int a, int b)
 
 void Move(Program *p)
 {
-   double x2, y2, angle = 2 * PI * p->t.dir / 360;
+   double x2, y2, angle = PI * p->t.dir / 180.0;
 
-   x2 = p->t.x - cos(angle)*p->currvar*2;
+   x2 = p->t.x + cos(angle)*p->currvar*2;
    y2 = p->t.y - sin(angle)*p->currvar*2;
 
    Neill_SDL_SetDrawColour(p->swin, rand()%SDL_8BITCOLOUR,
                                 rand()%SDL_8BITCOLOUR,
                                 rand()%SDL_8BITCOLOUR);
 
-   SDL_RenderDrawLine(p->swin->renderer, (int) p->t.x, (int)p->t.y, (int)x2, (int)y2);
+   SDL_RenderDrawLine(p->swin->renderer, round(p->t.x), round(p->t.y) \
+                                       , round(x2), round(y2));
 
    p->t.x = x2;
    p->t.y = y2;
@@ -473,6 +472,16 @@ void VarGet(Program *p, int index){
    }
    else{
       p->currvar = p->vars[index];
+   }
+}
+
+int round(double num)
+{
+   if (num - (double) (int) num < 0.5){
+      return (int) num;
+   }
+   else{
+      return (int) num + 1;
    }
 }
 

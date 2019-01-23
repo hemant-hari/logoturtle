@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
    prog.t.x = WWIDTH / 2;
    prog.t.y = WHEIGHT / 2;
-   prog.t.dir = 90;
+   prog.t.dir = 90.0;
 
    if(!(fp = fopen(argv[1], "r"))){
       fprintf(stderr, "Cannot open %s\n", argv[1]);
