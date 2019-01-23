@@ -12,7 +12,7 @@
 #define NUMVARS 26
 #define CTOINT 'A'
 #define strsame(A,B) (strcmp(A,B) == 0)
-#define ERROR(PHRASE, l) {fprintf(stderr, "Fatal Error %s occured while interpreting, \
+#define ERROR(PHRASE, l) {fprintf(stderr, "Fatal Error %s occured while interpreting \
 phrase %d\n", PHRASE, l); exit(2);}
 
 enum bool{false, true};

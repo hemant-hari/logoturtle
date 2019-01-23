@@ -1,5 +1,14 @@
+[
+   CIRCLE 1 {
+      DO A FROM 1 TO 360 {
+         FD P1
+         RT 1
+      }
+   }
+]
 {
-   DO A FROM 1 TO 300 {
+   CIRCLE 1 ;
+   DO A FROM 1 TO 70 {
       SET B := A 50 + ;
       FD B
       LT 90.911

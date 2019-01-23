@@ -9,7 +9,7 @@
 #define NUMVARS 26
 #define CTOINT 'A'
 #define strsame(A,B) (strcmp(A,B) == 0)
-#define ERROR(PHRASE,l) {fprintf(stderr, "Fatal Error %s occured while parsing, \
+#define ERROR(PHRASE,l) {fprintf(stderr, "Fatal Error %s occured while parsing \
 phrase %d\n", PHRASE, l); exit(2);}
 
 enum bool{false, true};

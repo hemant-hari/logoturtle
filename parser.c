@@ -47,7 +47,6 @@ void Instruction(Program *p)
       return;
    }
 
-   printf("%s\n", p->wds[p->cl]);
    ERROR("? Invalid instruction given ?",p->cl)
 }
 

@@ -143,13 +143,8 @@ void Polish(Program *p)
 
 void Do(Program *p)
 {
-   Pstack stk;
-   int charv;
+   int charv, retl;
    double limitval, modval;
-
-   /* Initialise stack */
-   stk.numelems = 0;
-   stk.tp = NULL;
 
    /* Get array key for input variable */
    charv = Var(p);
@@ -182,20 +177,18 @@ void Do(Program *p)
       ERROR("? Invalid symbol after loop start, use '{' ?",p->cl)
    }
    p->cl += 1;
-   Push(&stk, p->cl);
+   retl = p->cl;
 
    /* Checks whether starting value is greater or less than
    initial and decrements or increments accordingly */
    modval = (limitval < p->vars[charv]) ? -1 : 1 ;
 
    while (p->vars[charv] - limitval < 0.0001){
-      p->cl = Pop(&stk);
-      Push(&stk, p->cl);
+      p->cl = retl;
       InstructionList(p);
       p->vars[charv] += modval;
    }
-   p->cl = Pop(&stk);
-   Push(&stk, p->cl);
+   p->cl = retl;
    InstructionList(p);
    p->vars[charv] += modval;
 }
