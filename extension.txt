@@ -1,0 +1,35 @@
+#####################   FORMAL GRAMMAR EXTENSION   ########################
+FUNCTION DEFINITION FUNCTIONALITY ADDED:-
+
+<START> ::= "[" <FUNCTIONLIST> | "{" <INSTRCTLST>
+<FUNCTIONLIST> ::= <MAKEFUNCTION> <FUNCTIONLIST> | "]" "{" <INSTRCTLST>
+<MAKEFUNCTION> ::= <FUNCNAME> <NUM> "{" <INSTRCTLST>
+<CALLFUNCTION> ::= <FUNCNAME> <PARAMLIST>
+<PARAMLIST> ::= <VARNUM> <PARAMLIST> | ";"
+
+Function definitions may use <PAR> in their <INSTRCTLST>.
+
+INSTRCTLST called through functions <VARNUM>s
+are now <PARVARNUMS>
+
+<PARVARNUMS> ::= <PAR> | <VAR> | <NUM>
+<PAR> ::= [P0 - P9]
+###########################################################################
+
+Functions are defined in a list at the start of the code in square
+brackets. They are defined by writing its name, then the number of
+parameters that will be used in the function and then an opening
+curly brace which will then contain a set of instructions which may
+be called as an instruction in the main code. Functions are called
+by using the name followed by a list of Variables or Numbers.
+
+When a function is defined an entry is made in a dictionary structure
+which contains a hash table. Each entry contains a number of function
+settings, including the start line of the function, an array of local
+variables to be used when the function is called, an array containing
+the parameters themselves and their number as specified in the function
+definition. A function call searches for a matching entry in the dictionary
+and if successful returns the entry for the function and then goes to
+the start line of the function and executes it as normal.
+
+###########################################################################

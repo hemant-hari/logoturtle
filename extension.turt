@@ -19,6 +19,7 @@
       SET B := A 50 + ;
       FD B
       LT 90.911
-      CIRCLE A ;
+      SET C := A 20 / ;
+      CIRCLE C ;
    }
 }
