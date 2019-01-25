@@ -31,6 +31,9 @@ void FunctionList(Program *p)
    if (dic_isin(p->funcs, p->wds[p->cl])){
       ERROR("? Function Redefinition ?",p->cl)
    }
+   if (isInbuilt(p)){
+      ERROR("? Function name same as inbuilt function ?",p->cl)
+   }
    MakeFunction(p);
    p->cl += 1;
    FunctionList(p);
@@ -208,7 +211,7 @@ void Num(Program *p)
       }
    }
    p->currvar = atof(p->wds[p->cl]);
-   if (p->currvar - 0 < 0.000001){
+   if (p->currvar - 0 < MINPRECISION){
       printf("? Value for instruction is 0, is this intentional ?\n");
    }
 }
@@ -285,7 +288,7 @@ void Do(Program *p)
    initial and decrements or increments accordingly */
    if (p->isfunction == false){
       modval = (limitval < p->vars[charv]) ? -1 : 1 ;
-      while (p->vars[charv] - limitval < 0.0001){
+      while (p->vars[charv] - limitval < MINPRECISION){
          p->cl = retl;
          InstructionList(p);
          p->vars[charv] += modval;
@@ -293,7 +296,7 @@ void Do(Program *p)
    }
    else{
       modval = (limitval < p->currfunc->locvars[charv]) ? -1 : 1 ;
-      while (p->currfunc->locvars[charv] - limitval < 0.0001){
+      while (p->currfunc->locvars[charv] - limitval < MINPRECISION){
          p->cl = retl;
          InstructionList(p);
          p->currfunc->locvars[charv] += modval;
@@ -387,6 +390,21 @@ bool isParVarNum(Program *p)
    }
 
    return true;
+}
+
+bool isInbuilt(Program *p)
+{
+   char *v = p->wds[p->cl];
+
+   if(strsame(v,"FD") ||
+      strsame(v,"LT") ||
+      strsame(v,"RT") ||
+      strsame(v,"SET") ||
+      strsame(v,"DO")){
+      return true;
+   }
+
+   return false;
 }
 
 void Push(Pstack *s, int n)

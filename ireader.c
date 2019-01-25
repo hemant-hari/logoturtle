@@ -1,6 +1,6 @@
 #include "neillsdl2.h"
 
-void testfunc(void);
+void prog_init(Program *p);
 
 int main(int argc, char **argv)
 {
@@ -9,22 +9,14 @@ int main(int argc, char **argv)
    Program prog;
    SDL_Simplewin sw;
 
-   testfunc();
+   /*test_all();*/
 
    if (argc != 2){
       fprintf(stderr, "ERROR: Incorrect number of arguments to program\n");
       exit(2);
    }
 
-   prog.cl = 0;
-   for(i=0; i<MAXNUMTOKENS; i++){
-      prog.wds[i][0] = '\0';
-   }
-
-   prog.t.x = WWIDTH / 2;
-   prog.t.y = WHEIGHT / 2;
-   prog.t.dir = 90.0;
-   prog.currvar = 0;
+   prog_init(&prog);
 
    if(!(fp = fopen(argv[1], "r"))){
       fclose(fp);
@@ -53,21 +45,21 @@ int main(int argc, char **argv)
    return 0;
 }
 
-void testfunc(void)
+void prog_init(Program *p)
 {
-   int a, b, c, d;
-   Pstack stk;
-   stk.numelems = 0;
+   int i;
 
-   Push(&stk, 10);
-   Push(&stk, 5);
-   Push(&stk, 30);
-   Push(&stk, 20);
+   p->cl = 0;
+   for(i=0; i<MAXNUMTOKENS; i++){
+      p->wds[i][0] = '\0';
+   }
 
-   a = Pop(&stk);
-   b = Pop(&stk);
-   c = Pop(&stk);
-   d = Pop(&stk);
+   for(i=0; i<NUMVARS; i++){
+      p->vars[i] = 0;
+   }
 
-   printf("%d %d %d %d\n", a, b, c, d);
+   p->t.x = WWIDTH / 2;
+   p->t.y = WHEIGHT / 2;
+   p->t.dir = 90.0;
+   p->currvar = 0;
 }

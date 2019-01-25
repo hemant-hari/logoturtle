@@ -106,7 +106,7 @@ void Num(Program *p)
       }
    }
    p->currvar = atof(p->wds[p->cl]);
-   if (p->currvar - 0 < 0.000001){
+   if (p->currvar - 0 < MINPRECISION){
       printf("? Value for instruction is 0, is this intentional ?\n");
    }
 }
@@ -183,7 +183,7 @@ void Do(Program *p)
    initial and decrements or increments accordingly */
    modval = (limitval < p->vars[charv]) ? -1 : 1 ;
 
-   while (p->vars[charv] - limitval < 0.0001){
+   while (p->vars[charv] - limitval < MINPRECISION){
       p->cl = retl;
       InstructionList(p);
       p->vars[charv] += modval;

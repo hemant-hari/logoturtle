@@ -14,6 +14,10 @@ parse: preader.c parser.c parser.h
 interpret: ireader.c interpreter.c interpreter.h
 	$(CC) ireader.c interpreter.c neillsdl2.c neillsdl2.h -o interpret $(CFLAGS) $(OPTIM) -include interpreter.h
 
+testinterpret: ireader.c test.c interpreter.c interpreter.h
+	$(CC) test.c interpreter.c neillsdl2.c neillsdl2.h -o testinterpret $(CFLAGS) $(OPTIM) -include interpreter.h
+
+
 extension: ireader.c extension.c extension.h
 	$(CC) ireader.c extension.c neillsdl2.c neillsdl2.h hsh.c -o extension $(CFLAGS) $(OPTIM) -include extension.h
 

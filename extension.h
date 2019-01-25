@@ -11,6 +11,7 @@
 #define MAXLOAD 0.6
 #define MAXWORD 50
 #define PI 3.14159265358979323846
+#define MINPRECISION 0.000001
 #define MILLISECONDDELAY 20
 #define MAXNUMTOKENS 300
 #define MAXTOKENSIZE 15
@@ -95,6 +96,7 @@ void CallFunction(Program *p);
 bool isOperator(Program *p);
 bool isVarNum(Program *p);
 bool isParVarNum(Program *p);
+bool isInbuilt(Program *p);
 void Push(Pstack *s, int n);
 int Pop(Pstack *s);
 int Calculate(Program *p, int a, int b);
